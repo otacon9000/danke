@@ -43,6 +43,7 @@ void ATank::Tick(float DeltaTime)
 		FVector ImpactPointLocation = HitResult.ImpactPoint;
 
 		DrawDebugSphere(GetWorld(), ImpactPointLocation, 20.f, 6, FColor::Red, false);
+		RotateTurret(ImpactPointLocation);
 	}
 }
 
@@ -68,5 +69,7 @@ void ATank::Turn(float Value)
 	DeltaRotation.Yaw = Value * TurnRate * UGameplayStatics::GetWorldDeltaSeconds(this);
 
 	AddActorLocalRotation(DeltaRotation, true);
+
+	
 }
 
