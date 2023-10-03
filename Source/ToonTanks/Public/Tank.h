@@ -9,6 +9,7 @@
 
 class USpringArmComponent;
 class UCameraComponent;
+
 /**
  * 
  */
@@ -20,13 +21,13 @@ class TOONTANKS_API ATank : public ABasePawn
 public:
 	ATank();
 
+	void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	//void Tick(float DeltaTime) override;
-
-
-	//void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	virtual void Tick(float DeltaTime) override; 
 
 protected:
+
+	virtual void BeginPlay() override; 
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	USpringArmComponent* SpringArmComp;
@@ -34,7 +35,16 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UCameraComponent* CameraComp; 
 
+	UPROPERTY(EditAnywhere, Category = "Movement")
+	float MovementSpeed;
 
-	//void BeginPlay() override;
+	UPROPERTY(EditAnywhere, Category="Movement")
+	float TurnRate;
+
+	APlayerController* PC; 
+
+	void Move(float Value);
+
+	void Turn(float Value); 
 
 };
