@@ -43,7 +43,7 @@ void ATank::Tick(float DeltaTime)
 		PC->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, HitResult);
 		FVector ImpactPointLocation = HitResult.ImpactPoint;
 
-		DrawDebugSphere(GetWorld(), ImpactPointLocation, 20.f, 6, FColor::Red, false);
+		//DrawDebugSphere(GetWorld(), ImpactPointLocation, 20.f, 6, FColor::Red, false);
 		RotateTurret(ImpactPointLocation);
 	}
 }

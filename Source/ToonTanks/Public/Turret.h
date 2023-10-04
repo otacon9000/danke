@@ -23,8 +23,18 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 protected:
+
+
 	UPROPERTY(EditDefaultsOnly, Category="Turret")
 	int32 FireRange; 
+
+	FTimerHandle FireRateTimerHandle;
+	float FireRate; 
+
+	void CheckFireCondition(); 
+
+	bool InFireRange();
+
 
 	virtual void BeginPlay() override;
 
