@@ -32,3 +32,8 @@ void ABasePawn::RotateTurret(FVector LookAtTarget)
 
 	TurretMesh->SetWorldRotation(FMath::RInterpTo(TurretMesh->GetComponentRotation(), LookAtRotation, UGameplayStatics::GetWorldDeltaSeconds(this), 15.f));
 }
+
+void ABasePawn::Fire()
+{
+	DrawDebugSphere(GetWorld(), ProjectileSpawnPoint->GetComponentLocation(), 50.f, 8, FColor::Red, false, 2.f);
+}
