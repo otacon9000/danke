@@ -6,9 +6,11 @@
 #include "GameFramework/Pawn.h"
 #include "BasePawn.generated.h"
 
+
 class UCapsuleComponent;
 class UStaticMeshComponent;
 class USceneComponent;
+class ABaseProjectile; 
 
 UCLASS()
 class TOONTANKS_API ABasePawn : public APawn
@@ -35,6 +37,8 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Componets", meta = (AllowPrivateAccess = "true"))
 	USceneComponent* ProjectileSpawnPoint;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Combat")
+	TSubclassOf<ABaseProjectile> ProjectileClass;
 
 
 };
