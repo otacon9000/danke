@@ -27,6 +27,10 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void StartGame();
 
+	
+	UFUNCTION(BlueprintImplementableEvent)
+	void GameOver(bool bWonGame);
+
 protected:
 
 	virtual void BeginPlay() override;
@@ -40,5 +44,7 @@ private:
 
 	void HandleGameStart();
 
+	int32 TargetTurret;
+	int32 GetTurretTargetCount();
 
 };

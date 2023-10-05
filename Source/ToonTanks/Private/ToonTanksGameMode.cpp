@@ -8,6 +8,12 @@
 #include "ToonTanksPlayerController.h"
 
 
+AToonTanksGameMode::AToonTanksGameMode()
+{
+    StartDelay = 3.f;
+    TargetTurret = 0;
+}
+
 void AToonTanksGameMode::BeginPlay()
 {
 	Super::BeginPlay(); 
@@ -18,6 +24,7 @@ void AToonTanksGameMode::BeginPlay()
 
 void AToonTanksGameMode::HandleGameStart()
 {
+    TargetTurret = GetTurretTargetCount();
     Tank = Cast<ATank>(UGameplayStatics::GetPlayerPawn(this, 0));
     ToonTanksPlayerController = Cast<AToonTanksPlayerController>(UGameplayStatics::GetPlayerController(this, 0));
 
@@ -36,9 +43,13 @@ void AToonTanksGameMode::HandleGameStart()
     }
 }
 
-AToonTanksGameMode::AToonTanksGameMode()
+
+
+int32 AToonTanksGameMode::GetTurretTargetCount()
 {
-    StartDelay = 3.f;
+    TArray<AActor*> Turrets;
+    UGameplayStatics::GetAllActorsOfClass(this, ATurret::StaticClass(), Turrets);
+    return Turrets.Num();
 }
 
 void AToonTanksGameMode::ActorDied(AActor* DeadActor)
@@ -50,10 +61,17 @@ void AToonTanksGameMode::ActorDied(AActor* DeadActor)
         {
             ToonTanksPlayerController->SetPlayerEnabledState(false);
         }
+        GameOver(false);
     }
     else if (ATurret* DestroyedTower = Cast<ATurret>(DeadActor))
     {
         DestroyedTower->HandleDestruction();
+        --TargetTurret;
+
+        if (TargetTurret == 0)
+        {
+            GameOver(true);
+        }
     }
 
 }
