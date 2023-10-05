@@ -25,6 +25,10 @@ public:
 
 	virtual void Tick(float DeltaTime) override; 
 
+	void HandleDestruction();
+
+	APlayerController* GetTankPlayerController() const; 
+
 protected:
 
 	virtual void BeginPlay() override; 

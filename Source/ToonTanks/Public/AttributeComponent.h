@@ -7,6 +7,7 @@
 #include "AttributeComponent.generated.h"
 
 class AController;
+class AToonTanksGameMode;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class TOONTANKS_API UAttributeComponent : public UActorComponent
@@ -27,7 +28,9 @@ private:
 	float Health;
 
 	UFUNCTION()
-	void DamageTaken(AActor* DamegeActor, float Damage, const UDamageType* DamageType, AController* Instigator, AActor* DamageCauser);
+	void DamageTaken(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* Instigator, AActor* DamageCauser);
+
+	 AToonTanksGameMode* ToonTanksGameMode;
 
 public:	
 	// Called every frame
