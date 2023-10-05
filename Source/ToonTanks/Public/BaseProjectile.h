@@ -9,6 +9,9 @@
 
 class UStaticMeshComponent; 
 class UProjectileMovementComponent;
+class UParticleSystem;
+class UParticleSystemComponent;
+class USoundBase; 
 
 UCLASS()
 class TOONTANKS_API ABaseProjectile : public AActor
@@ -24,10 +27,10 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Component")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Combat")
 	UStaticMeshComponent* ProjectileComp; 
 
-	UPROPERTY(VisibleAnywhere, Category = "Component")
+	UPROPERTY(VisibleAnywhere, Category = "Combat")
 	UProjectileMovementComponent* MoveComp;
 
 private:
@@ -36,6 +39,17 @@ private:
 
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+	
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	UParticleSystem* HitParticles;
+
+	UPROPERTY(VisibleAnywhere, Category = "Combat")
+	UParticleSystemComponent* TrailParticlesComp;
+
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	USoundBase* LaunchSound;
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	USoundBase* HitSound;
 
 
 };

@@ -9,12 +9,16 @@
 #include "AttributeComponent.h"
 #include "GameFramework/DamageType.h"
 #include "Kismet/GameplayStatics.h"
+#include "Particles/ParticleSystemComponent.h"
 
 
 
 // Sets default values
 ABaseProjectile::ABaseProjectile()
 {
+
+	PrimaryActorTick.bCanEverTick = false;
+
 	ProjectileComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ProjectileComp"));
 	RootComponent = ProjectileComp;
 
@@ -22,7 +26,9 @@ ABaseProjectile::ABaseProjectile()
 	MoveComp->InitialSpeed = 1000.f;
 	MoveComp->MaxSpeed = 1000.f; 
 
-	PrimaryActorTick.bCanEverTick = false;
+	TrailParticlesComp = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("TrailComp"));
+	TrailParticlesComp->SetupAttachment(RootComponent);
+
 
 	Damage = 50.f;
 
@@ -34,6 +40,13 @@ void ABaseProjectile::BeginPlay()
 	Super::BeginPlay();
 	
 	ProjectileComp->OnComponentHit.AddDynamic(this, &ABaseProjectile::OnHit); 
+
+	if (ensure(LaunchSound))
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, LaunchSound, GetActorLocation());
+
+	}
+
 
 }
 
@@ -47,17 +60,35 @@ void ABaseProjectile::Tick(float DeltaTime)
 
 void ABaseProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	
+
 	AActor* MyOwner = GetOwner();
-	
-	if (MyOwner == nullptr) return;
- 	
+
+	if (MyOwner == nullptr) 
+	{	
+		Destroy();
+		return; 
+	}
+
 	AController* InstigatorController = MyOwner->GetInstigatorController();
-	auto DamageTypeClass =  UDamageType::StaticClass();
+	auto DamageTypeClass = UDamageType::StaticClass();
 
 	if (OtherActor && OtherActor != this && OtherActor != MyOwner)
 	{
 		UGameplayStatics::ApplyDamage(OtherActor, Damage, InstigatorController, this, DamageTypeClass);
-		Destroy();
+
+		if (HitParticles)
+		{
+			UGameplayStatics::SpawnEmitterAtLocation(this, HitParticles, GetActorLocation(), GetActorRotation());
+		}
+		
+		if (ensure(HitSound))
+		{
+			UGameplayStatics::PlaySoundAtLocation(this, HitSound, GetActorLocation());
+
+		}
+		
+		
 	}
+
+	Destroy();
 }
