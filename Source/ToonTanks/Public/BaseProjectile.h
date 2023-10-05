@@ -31,6 +31,9 @@ protected:
 	UProjectileMovementComponent* MoveComp;
 
 private:
+	UPROPERTY(EditAnywhere)
+	float Damage; 
+
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 

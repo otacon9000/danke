@@ -7,6 +7,10 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "GameFramework/Actor.h"
 #include "AttributeComponent.h"
+#include "GameFramework/DamageType.h"
+#include "Kismet/GameplayStatics.h"
+
+
 
 // Sets default values
 ABaseProjectile::ABaseProjectile()
@@ -20,6 +24,7 @@ ABaseProjectile::ABaseProjectile()
 
 	PrimaryActorTick.bCanEverTick = false;
 
+	Damage = 50.f;
 
 }
 
@@ -32,10 +37,6 @@ void ABaseProjectile::BeginPlay()
 
 }
 
-void ABaseProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
-{
-	UE_LOG(LogTemp, Warning, TEXT("actor name"));
-}
 
 // Called every frame
 void ABaseProjectile::Tick(float DeltaTime)
@@ -44,3 +45,19 @@ void ABaseProjectile::Tick(float DeltaTime)
 
 }
 
+void ABaseProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+	
+	AActor* MyOwner = GetOwner();
+	
+	if (MyOwner == nullptr) return;
+ 	
+	AController* InstigatorController = MyOwner->GetInstigatorController();
+	auto DamageTypeClass =  UDamageType::StaticClass();
+
+	if (OtherActor && OtherActor != this && OtherActor != MyOwner)
+	{
+		UGameplayStatics::ApplyDamage(OtherActor, Damage, InstigatorController, this, DamageTypeClass);
+		Destroy();
+	}
+}

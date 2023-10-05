@@ -34,5 +34,9 @@ void UAttributeComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 
 void UAttributeComponent::DamageTaken(AActor* DamegeActor, float Damage, const UDamageType* DamageType, AController* Instigator, AActor* DamageCauser)
 {
-	UE_LOG(LogTemp, Log, TEXT("Sono un component"));
+	if (Damage <= 0.0f) return;
+	
+	Health -= Damage;
+
+	UE_LOG(LogTemp, Warning, TEXT("Health updated: %f"), Health);
 }
